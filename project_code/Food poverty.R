@@ -291,12 +291,18 @@ fwrite(FP.povcal.PPP,"output/Povcal food poverty.csv")
 
 FP.povcal.PPP <- merge(FP.povcal.PPP, unique(ext[,c("CountryCode","RegionCode")]), by="CountryCode")
 
-aggs <- FP.povcal.PPP[, .(Population=sum(ReqYearPopulation)
+aggs <- rbind(FP.povcal.PPP[, .(Population=sum(ReqYearPopulation)
                           , Extreme.poor=sum(HeadCount.extreme*ReqYearPopulation)
                           , Extreme.poverty=sum(HeadCount.extreme*ReqYearPopulation)/sum(ReqYearPopulation)
                           , Food.poor=sum(HeadCount*ReqYearPopulation)
                           , Food.poverty=sum(HeadCount*ReqYearPopulation)/sum(ReqYearPopulation))
                       , by=.(RequestYear,RegionCode)]
+              , cbind("RegionCode"="WLD",FP.povcal.PPP[, .(Population=sum(ReqYearPopulation)
+                                  , Extreme.poor=sum(HeadCount.extreme*ReqYearPopulation)
+                                  , Extreme.poverty=sum(HeadCount.extreme*ReqYearPopulation)/sum(ReqYearPopulation)
+                                  , Food.poor=sum(HeadCount*ReqYearPopulation)
+                                  , Food.poverty=sum(HeadCount*ReqYearPopulation)/sum(ReqYearPopulation))
+                              , by=.(RequestYear)]))
 
 FP.povcal.PPP$delta <- FP.povcal.PPP$HeadCount - FP.povcal.PPP$HeadCount.extreme
 
@@ -305,8 +311,14 @@ changes <- changes[order(delta)]
 changesdown <- head(changes[,c("CountryName","HeadCount","HeadCount.extreme","delta","ReqYearPopulation")],10)
 changesup <- tail(changes[,c("CountryName","HeadCount","HeadCount.extreme","delta","ReqYearPopulation")],10)
 
-area.plot <- ggplot(melt(aggs, id.vars=c(1,2))[variable == "Food.poor"], aes(x=RequestYear))+
+area.plot <- ggplot(melt(aggs, id.vars=c(1,2))[variable == "Food.poor" & RegionCode != "WLD"], aes(x=RequestYear))+
   geom_area(aes(y=value, fill=RegionCode))
 
-line.plot <- ggplot(melt(aggs, id.vars=c(1,2))[variable == "Food.poverty"], aes(x=RequestYear))+
-  geom_line(aes(y=value, colour=RegionCode), size=1.3)
+line.plot <- ggplot(dcast.data.table(aggs, RequestYear ~ RegionCode, value.var = "Food.poverty"))+
+  geom_line(aes(x=RequestYear,y=EAP), colour='red', size=1, alpha=0.2)+
+  geom_line(aes(x=RequestYear,y=ECA), colour='yellow', size=1, alpha=0.2)+
+  geom_line(aes(x=RequestYear,y=LAC), colour='green', size=1, alpha=0.2)+
+  geom_line(aes(x=RequestYear,y=MNA), colour='cyan', size=1, alpha=0.2)+
+  geom_line(aes(x=RequestYear,y=SAS), colour='blue', size=1, alpha=0.2)+
+  geom_line(aes(x=RequestYear,y=SSA), colour='pink', size=1, alpha=0.2)+
+  geom_line(aes(x=RequestYear,y=WLD), size=1.3)
