@@ -10,7 +10,7 @@ Povcal.CPI <- read.csv("project_data/doc_cpi_list.csv")
 #Download FAO food CPI and total CPI
 temp_download <- tempfile(pattern = "", fileext = ".zip")
 download.file("http://fenixservices.fao.org/faostat/static/bulkdownloads/ConsumerPriceIndices_E_All_Data.zip",temp_download)
-FAO.CPI <- read.csv(unz(temp_download,"ConsumerPriceIndices_E_All_Data_NOFLAG.csv"))
+FAO.CPI <- data.table(read.csv(unz(temp_download,"ConsumerPriceIndices_E_All_Data_NOFLAG.csv")))
 unlink(temp_download)
 
 #Establish year range
@@ -23,7 +23,7 @@ end.year <- max(rbind(data$Current.year.1,data$Current.year.2),na.rm=T)
 WDI.CPI <- WDI(indicator="FP.CPI.TOTL",start=start.year,end=end.year,extra=T)
 WDI.ISO <- unique(WDI.CPI[,c("country","iso3c")])
 WDI.CPI <- WDI.CPI[,c("country","year","FP.CPI.TOTL")]
-WDI.PPP <- WDI(indicator="PA.NUS.PRVT.PP",start=2011,end=2011)[,c("country","PA.NUS.PRVT.PP")]
+WDI.PPP <- WDI(indicator="PA.NUS.PRVT.PP", start = 2017,end=2017)[,c("country","PA.NUS.PRVT.PP")]
 
 remap_cov = function(x){
   cov_dict = c(
@@ -105,40 +105,39 @@ FAO.CPI$WB.country <- as.character(FAO.CPI$Area)
 }
 
 #Melt FAO by country, year, indicator
-FAO.CPI.melt <- melt(FAO.CPI,id.vars = c("Area.Code","Area","Item.Code","Item","Months.Code","Months","Unit","WB.country"))
+FAO.CPI.melt <- melt.data.table(FAO.CPI,id.vars = c("Area.Code","Area","Item.Code","Item","Months.Code","Months","Unit","WB.country"))
 FAO.CPI.melt$variable <- as.numeric(substr(FAO.CPI.melt$variable,2,5))
-FAO.CPI.melt <- FAO.CPI.melt[,c("WB.country","Item","Months","variable","value")]
+FAO.CPI.melt <- FAO.CPI.melt[,c("WB.country","Item","Months","variable","value"), with = F]
 
 #Calculate FAO mean indices by year
-FAO.CPI.mean <- aggregate(FAO.CPI.melt, by = list(FAO.CPI.melt$WB.country,FAO.CPI.melt$Item,FAO.CPI.melt$variable), drop= T, FUN=mean, na.rm=T)
-FAO.CPI.mean <- FAO.CPI.mean[,c("Group.1","Group.2","Group.3","value")]
+FAO.CPI.mean <- FAO.CPI.melt[, .(mean(as.numeric(value), na.rm = T)), by = .(`WB.country`, `Item`, `variable`)]
 names(FAO.CPI.mean) <- c("country","indicator","year","value")
 
-#Separate FCPI and CPI, merge WDI and rebase to 2011
-FCPI <- subset(FAO.CPI.mean, indicator == "Consumer Prices, Food Indices (2010 = 100)")[,c("country","year","value")]
-FCPI.2011 <- subset(FCPI,year==2011)
-FCPI.2011 <- merge(FCPI,FCPI.2011,by=("country"),all.x=T)
-FCPI.2011$value.2011 <- FCPI.2011$value.x/FCPI.2011$value.y
-FCPI.2011 <- FCPI.2011[,c("country","year.x","value.2011")]
-CPI <- subset(FAO.CPI.mean, indicator == "Consumer Prices, General Indices (2010 = 100)")[,c("country","year","value")]
+#Separate FCPI and CPI, merge WDI and rebase to 2017
+FCPI <- subset(FAO.CPI.mean, indicator == "Consumer Prices, Food Indices (2015 = 100)")[,c("country","year","value")]
+FCPI.2017 <- subset(FCPI,year==2017)
+FCPI.2017 <- merge(FCPI,FCPI.2017,by=("country"),all.x=T)
+FCPI.2017$value.2017 <- FCPI.2017$value.x/FCPI.2017$value.y
+FCPI.2017 <- FCPI.2017[,c("country","year.x","value.2017")]
+CPI <- subset(FAO.CPI.mean, indicator == "Consumer Prices, General Indices (2015 = 100)")[,c("country","year","value")]
 CPI <- merge(CPI, WDI.CPI,by=c("country","year"),all.y=T)
-CPI.2011 <- subset(CPI,year==2011)
-CPI.2011 <- merge(CPI,CPI.2011,by=("country"),all.x=T)
-CPI.2011$FAO.value.2011 <- CPI.2011$value.x/CPI.2011$value.y
-CPI.2011$WDI.value.2011 <- CPI.2011$FP.CPI.TOTL.x/CPI.2011$FP.CPI.TOTL.y
-CPI.2011 <- CPI.2011[,c("country","year.x","FAO.value.2011","WDI.value.2011")]
+CPI.2017 <- subset(CPI,year==2017)
+CPI.2017 <- merge(CPI,CPI.2017,by=("country"),all.x=T)
+CPI.2017$FAO.value.2017 <- CPI.2017$value.x/CPI.2017$value.y
+CPI.2017$WDI.value.2017 <- CPI.2017$FP.CPI.TOTL.x/CPI.2017$FP.CPI.TOTL.y
+CPI.2017 <- CPI.2017[,c("country","year.x","FAO.value.2017","WDI.value.2017")]
 
 #Merge indices with data
-data <- merge(data,FCPI.2011, by.x=c("Country","Current.year.1"),by.y=c("country","year.x"),all.x=T)
-names(data)[which(names(data)=="value.2011")] <- "FCPI.1"
-data <- merge(data,FCPI.2011, by.x=c("Country","Current.year.2"),by.y=c("country","year.x"),all.x=T)
-names(data)[which(names(data)=="value.2011")] <- "FCPI.2"
-data <- merge(data,CPI.2011, by.x=c("Country","Current.year.1"),by.y=c("country","year.x"),all.x=T)
-names(data)[which(names(data)=="FAO.value.2011")] <- "FAO.CPI.1"
-names(data)[which(names(data)=="WDI.value.2011")] <- "WDI.CPI.1"
-data <- merge(data,CPI.2011, by.x=c("Country","Current.year.2"),by.y=c("country","year.x"),all.x=T)
-names(data)[which(names(data)=="FAO.value.2011")] <- "FAO.CPI.2"
-names(data)[which(names(data)=="WDI.value.2011")] <- "WDI.CPI.2"
+data <- merge(data,FCPI.2017, by.x=c("Country","Current.year.1"),by.y=c("country","year.x"),all.x=T)
+names(data)[which(names(data)=="value.2017")] <- "FCPI.1"
+data <- merge(data,FCPI.2017, by.x=c("Country","Current.year.2"),by.y=c("country","year.x"),all.x=T)
+names(data)[which(names(data)=="value.2017")] <- "FCPI.2"
+data <- merge(data,CPI.2017, by.x=c("Country","Current.year.1"),by.y=c("country","year.x"),all.x=T)
+names(data)[which(names(data)=="FAO.value.2017")] <- "FAO.CPI.1"
+names(data)[which(names(data)=="WDI.value.2017")] <- "WDI.CPI.1"
+data <- merge(data,CPI.2017, by.x=c("Country","Current.year.2"),by.y=c("country","year.x"),all.x=T)
+names(data)[which(names(data)=="FAO.value.2017")] <- "FAO.CPI.2"
+names(data)[which(names(data)=="WDI.value.2017")] <- "WDI.CPI.2"
 data <- merge(data, Povcal.CPI.melt, by.x=c("Country", "Povcal.code","Current.year.1"),by.y=c("country","ISO","Year"),all.x=T)
 data <- merge(data, Povcal.CPI.melt, by.x=c("Country", "Povcal.code","Current.year.2"),by.y=c("country", "ISO","Year"),all.x=T)
 names(data)[which(names(data)=="value.x")] <- "Povcal.CPI.1"
@@ -147,13 +146,13 @@ data$Povcal.CPI.1 <- as.numeric(data$Povcal.CPI.1)
 data$Povcal.CPI.2 <- as.numeric(data$Povcal.CPI.2)
 
 #Average indicies across current years. Note that years missing data are not included in the average
-data$FCPI.2011 <- rowMeans(cbind(data$FCPI.1,data$FCPI.2),na.rm=T)
-data$FAO.CPI.2011 <- rowMeans(cbind(data$FAO.CPI.1,data$FAO.CPI.2),na.rm=T)
-data$WDI.CPI.2011 <- rowMeans(cbind(data$WDI.CPI.1,data$WDI.CPI.2),na.rm=T)
-data$Povcal.CPI.2011 <- rowMeans(cbind(data$Povcal.CPI.1,data$Povcal.CPI.2),na.rm=T)
+data$FCPI.2017 <- rowMeans(cbind(data$FCPI.1,data$FCPI.2),na.rm=T)
+data$FAO.CPI.2017 <- rowMeans(cbind(data$FAO.CPI.1,data$FAO.CPI.2),na.rm=T)
+data$WDI.CPI.2017 <- rowMeans(cbind(data$WDI.CPI.1,data$WDI.CPI.2),na.rm=T)
+data$Povcal.CPI.2017 <- rowMeans(cbind(data$Povcal.CPI.1,data$Povcal.CPI.2),na.rm=T)
 data[is.na(data)] <- NA
 
-data <- data[,c("Country","Povcal.code","Country.code","Current.year","Income.group","FPL.current.","NPL.current.","Calories","FCPI.2011","FAO.CPI.2011","WDI.CPI.2011","Povcal.CPI.2011")]
+data <- data[,c("Country","Povcal.code","Country.code","Current.year","Income.group","FPL.current.","Calories","FCPI.2017","FAO.CPI.2017","WDI.CPI.2017","Povcal.CPI.2017")]
 
 #Merge PPP conversions
 data <- merge(data,WDI.PPP, by.x="Country",by.y="country",all.x=T)
@@ -170,17 +169,6 @@ normalise.FPL.calories <- function(FPL,calories){
     FPL.out <- FPL
   }
   return(FPL.out)
-}
-
-normalise.NPL.calories <- function(NPL,FPL,calories){
-  if(!is.na(calories)){
-    NPL.excess <- NPL - FPL
-    FPL.cal <- FPL/calories*2100
-    NPL.out <- FPL.cal + NPL.excess
-  } else {
-    NPL.out <- NPL
-  }
-  return(NPL.out)
 }
 
 fcpi.deflate <- function(FPL,fcpi,povcal.cpi,WDI.cpi,FAO.cpi){
@@ -224,20 +212,17 @@ PPP.convert <- function(PL,povcal.PPP,WDI.PPP){
 
 i <- 1
 for (i in 1:nrow(data)){
-  PL[i,"FPL.2011LCU"] <- normalise.FPL.calories(data[i,"FPL.current."],data[i,"Calories"])
-  PL[i,"FPL.2011LCU"] <- fcpi.deflate(PL[i,"FPL.2011LCU"],data[i,"FCPI.2011"],data[i,"Povcal.CPI.2011"],data[i,"WDI.CPI.2011"],data[i,"FAO.CPI.2011"])
-  PL[i,"FPL.2011PPP"] <- PPP.convert(PL[i,"FPL.2011LCU"],data[i,"Povcal.PPP.conversion"],data[i,"WDI.PPP.conversion"])
-  PL[i,"NPL.2011LCU"] <- normalise.NPL.calories(data[i,"NPL.current."],data[i,"FPL.current."],data[i,"Calories"])
-  PL[i,"NPL.2011LCU"] <- cpi.deflate(PL[i,"NPL.2011LCU"],data[i,"Povcal.CPI.2011"],data[i,"WDI.CPI.2011"],data[i,"FAO.CPI.2011"])
-  PL[i,"NPL.2011PPP"] <- PPP.convert(PL[i,"NPL.2011LCU"],data[i,"Povcal.PPP.conversion"],data[i,"WDI.PPP.conversion"])
+  PL[i,"FPL.2017LCU"] <- normalise.FPL.calories(data[i,"FPL.current."],data[i,"Calories"])
+  PL[i,"FPL.2017LCU"] <- fcpi.deflate(PL[i,"FPL.2017LCU"],data[i,"FCPI.2017"],data[i,"Povcal.CPI.2017"],data[i,"WDI.CPI.2017"],data[i,"FAO.CPI.2017"])
+  PL[i,"FPL.2017PPP"] <- PPP.convert(PL[i,"FPL.2017LCU"],data[i,"Povcal.PPP.conversion"],data[i,"WDI.PPP.conversion"])
 }
 
-FPL <- PL[,c("Povcal.code","FPL.2011PPP")]
+FPL <- PL[,c("Povcal.code","FPL.2017PPP")]
 FPL <- FPL[complete.cases(FPL),]
 
 write.csv(PL,"output/PLs.csv",row.names=F)
 
-PL.data <- as.data.table(PL)[!(is.na(FPL.2011PPP))]
+PL.data <- as.data.table(PL)[!(is.na(FPL.2017PPP))]
 
 #Query Povcal with FPL(PPP) set as PL. There is a more efficient way of doing this (multiple countries and poverty lines per query), but the API doesn't seem to be able to handle it
 povcal.out.PPP <- function(country,year="all",PL){
@@ -249,7 +234,7 @@ povcal.out.PPP <- function(country,year="all",PL){
 i <- 1
 FP.list <- list()
 for (i in 1:nrow(FPL)){
-  FP.list[[i]] <- povcal.out.PPP(FPL[i,"Povcal.code"],year="all",PL=FPL[i,"FPL.2011PPP"])
+  FP.list[[i]] <- povcal.out.PPP(FPL[i,"Povcal.code"],year="all",PL=FPL[i,"FPL.2017PPP"])
 }
 
 FP.povcal.PPP <- rbindlist(FP.list)
@@ -264,7 +249,7 @@ FP.povcal.PPP <- rbindlist(FP.list)
 # i <- 1
 # FP.list <- list()
 # for (i in 1:nrow(PL.data)){
-#   FP.list[[i]] <- povcal.out.FPL(PL.data$Povcal.code[i],year="all",PL=1,PL.data[i,"FPL.2011PPP"])
+#   FP.list[[i]] <- povcal.out.FPL(PL.data$Povcal.code[i],year="all",PL=1,PL.data[i,"FPL.2017PPP"])
 # }
 # 
 # FP.povcal.FPL <- rbindlist(FP.list)

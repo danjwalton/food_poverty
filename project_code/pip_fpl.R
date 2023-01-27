@@ -1,0 +1,81 @@
+required.packages <- c("data.table","jsonlite", "rstudioapi", "httr")
+install.packages(required.packages[!(required.packages %in% installed.packages())])
+lapply(required.packages, require, character.only=T)
+setwd(dirname(getActiveDocumentContext()$path))
+
+source("https://raw.githubusercontent.com/devinit/gha_automation/main/general/wupData.R")
+
+pip <- "https://api.worldbank.org/pip/v1/pip?"
+
+fpls <- fread("fpl_2023.csv")
+fpls <- fpls[!is.na(fpl_2017)]
+
+fpls <- melt(fpls, id.vars = "countrycode", variable.factor = F)
+
+fpls[, `:=` (reporting_year = substr(variable, 5, 8), effective_year = substr(variable, nchar(variable) - 3, nchar(variable)))]
+
+if(length(list.files(pattern = "^food_poverty_2023[.]csv$")) == 1){
+  fpl_out <- fread("food_poverty_2023.csv")
+} else {
+  fpl_out <- data.table(cc = character(), effective_year = integer())
+  }
+
+fpls_todo <- fpls[!(paste0(countrycode, effective_year) %in% fpl_out[, paste0(cc, effective_year)])]
+
+for(i in 1:nrow(fpls_todo)){
+  if(exists("fpl_response")) rm(fpl_response)
+  
+  fpl_r <- fpls_todo[i]
+  cc <- fpl_r$countrycode
+  rep_lvl <- "all"
+  reporting_year <- fpl_r$reporting_year
+  pov_line <- round(fpl_r$value, 3)
+  
+  message(cc, fpl_r$effective_year)
+  
+  if(nchar(cc) > 3){
+    
+    rep_lvl <- ifelse(substr(cc, 5, 5) == "R", "rural", "urban")
+    cc <- substr(cc, 0, 3)
+  }
+  
+  pip_call <- paste0(pip, "country=", cc, "&year=", reporting_year, "&povline=", pov_line, "&reporting_level=", rep_lvl, "&fill_gaps=true")
+  
+  if(status_code(GET(pip_call)) != 404){
+  
+    fpl_response <- data.table(fromJSON(pip_call))
+  }
+  
+  fpl_response$effective_year <- fpl_r$effective_year
+  fpl_response$cc <- fpl_r$countrycode
+
+  fpl_out <- rbind(fpl_out, fpl_response, fill = T)
+  fwrite(fpl_out, "food_poverty_2023.csv")
+}
+
+#Total calculations
+food_pov <- fpl_out
+
+food_pov <- food_pov[order(cc, effective_year)]
+
+#Fill SSD with SDN pre-2008
+food_pov[cc == "SSD" & is.na(headcount), headcount := food_pov[, headcount[cc == "SDN" & headcount[cc == "SSD" & is.na(headcount)]]]]
+
+#Fill other blanks with nearest value
+food_pov[, headcount := nafill(headcount, "nocb"), by = .(cc)]
+food_pov[, headcount := nafill(headcount, "locf"), by = .(cc)]
+
+#Calculate number of poor
+wupPop <- wup_get()
+wupPop[, cc := paste0(ISO3, ifelse(area == "total", "", ifelse(area == "rural", "-R", "-U")))]
+food_pov <- merge(food_pov, wupPop[, .(cc, effective_year = (year), population)], all.x = T)
+food_pov[, poor := headcount * population]
+
+#Total by year
+food_poor_total <- food_pov[!is.na(poor), .(poor = sum(poor), population = sum(population)), by = effective_year][, effective_headcount := poor/population][]
+fwrite(food_poor_total, "food_poor_total.csv")
+
+#Total by country
+food_poor_cc <- food_pov[!is.na(poor),  .(poor = sum(poor), population = sum(population)), by = .(cc, effective_year)][, effective_headcount := poor/population][]
+food_poor_cc <- dcast(food_poor_cc, cc ~ effective_year, value.var = "poor")
+fwrite(food_poor_cc, "food_poor_cc.csv")

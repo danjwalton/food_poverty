@@ -1,0 +1,221 @@
+countryname,countrycode,incomegroup,fpl_lcu_current,currencycode_lcu,current_year_fpl,calories
+Afghanistan,AFG,Low income, 39.03 , AFN ,2016-2017,2100
+Albania,ALB,Upper middle income, 100.11 , ALL ,2002,2288
+Algeria,DZA,Upper middle income, 32.90 , DZD ,1995,2100
+American Samoa,ASM,Upper middle income,,,,
+Andorra,AND,High income,,,,
+Angola,AGO,Lower middle income," 1,111.29 ", AOA ,2022,2100
+Antigua and Barbuda,ATG,High income,,,,
+Argentina,ARG,High income, 525.93 , ARS ,2022,2100
+Armenia,ARM,Upper middle income, 407.46 , AMD ,2021,2100
+Aruba,ABW,High income,,,,
+Australia,AUS,High income,,,,
+Austria,AUT,High income,,,,
+Azerbaijan,AZE,Upper middle income, 0.05 , AZN ,2003,2200
+"Bahamas, The",BHS,High income,,,,
+Bahrain,BHR,High income,,,,
+Bangladesh,BGD,Lower middle income, 61.17 , BDT ,2016,2122
+Barbados,BRB,High income,,,,
+Belarus,BLR,Upper middle income, 193.14 , BYN ,2016,2473
+Belgium,BEL,High income,,,,
+Belize,BLZ,Upper middle income, 2.00 , BZD ,2018,2100
+Benin,BEN,Low income, 256.75 , XOF ,2015,2400
+Bermuda,BMU,High income,,,,
+Bhutan,BTN,Lower middle income, 48.41 , BTN ,2017,2124
+Bolivia,BOL,Lower middle income, 12.33 , BOB ,2017,2100
+Bosnia and Herzegovina,BIH,Upper middle income,,,,2100
+Botswana,BWA,Upper middle income, 8.58 , BWP ,2009-2010,2100
+Brazil,BRA,Upper middle income, 8.48 , BRL ,2018,2100
+British Virgin Islands,VGB,High income,,,,
+Brunei Darussalam,BRN,High income,,,,
+Bulgaria,BGR,Upper middle income,,,2002,2100
+Burkina Faso,BFA,Low income, 244.00 , XOF ,2014,2283
+Burundi,BDI,Low income, 926.54 , BIF ,2013-2014,2200
+Cabo Verde,CPV,Lower middle income, 80.85 , CVE ,2015,2127
+Cambodia,KHM,Lower middle income, 609.82 , KHR ,2013,2200
+Cameroon,CMR,Lower middle income,,,2014,2900
+Canada,CAN,High income,,,,
+Cayman Islands,CYM,High income,,,,
+Central African Republic,CAF,Low income, 488.32 , XAF ,2008,2100
+Chad,TCD,Low income, 438.03 , XAF ,2011,2400
+Channel Islands,CHI,High income,,,,
+Chile,CHL,High income," 1,019.43 ", CLP ,2012,2000
+China--Rural,CHN-R,Upper middle income, 4.99 , CNY ,2014,2100
+China--Urban,CHN-U,Upper middle income, 6.07 , CNY ,2014,2100
+Colombia,COL,Upper middle income," 3,768.11 ", COP ,2016,2100
+Comoros,COM,Low income, 549.03 , KMF ,2014,2200
+"Congo, Dem. Rep.",COD,Low income, 821.25 , CDF ,2012,2300
+"Congo, Rep.",COG,Lower middle income, 515.97 , XAF ,2011,2400
+Costa Rica,CRI,Upper middle income," 1,064.04 ", CRC ,2009,2100
+Cote d'Ivoire,CIV,Lower middle income, 335.07 , XOF ,2015,2100
+Croatia,HRV,High income,,,,
+Cuba,CUB,Upper middle income,,,,
+Curacao,CUW,High income,,,,
+Cyprus,CYP,High income,,,,
+Czech Republic,CZE,High income,,,,
+Denmark,DNK,High income,,,,
+Djibouti,DJI,Lower middle income, 306.05 , DJF ,2017,2115
+Dominica,DMA,Upper middle income, 6.67 , XCD ,2009,2400
+Dominican Republic,DOM,Upper middle income, 61.12 , DOP ,2011,2157
+Ecuador,ECU,Upper middle income, 1.05 , USD ,2006,2100
+"Egypt, Arab Rep.",EGY,Lower middle income, 10.58 , EGP ,2015,2100
+El Salvador,SLV,Lower middle income, 1.55 , USD ,2017,2100
+Equatorial Guinea,GNQ,Upper middle income, 636.49 , XAF ,2006,2100
+Eritrea,ERI,Low income, 4.93 , ERN ,2003,2200
+Estonia,EST,High income,,,,
+Eswatini,SWZ,Lower middle income, 15.22 , SZL ,2016,2100
+Ethiopia,ETH,Low income, 11.38 , ETB ,2011,2100
+Faroe Islands,FRO,High income,,,,
+Fiji,FJI,Upper middle income, 5.31 , FJD ,2019-2020,2100
+Finland,FIN,High income,,,,
+France,FRA,High income,,,,
+French Polynesia,PYF,High income,,,,
+Gabon,GAB,Upper middle income," 1,176.29 ", XAF ,2017,2100
+"Gambia, The",GMB,Low income, 32.29 , GMD ,2015-2016,2400
+Georgia,GEO,Lower middle income, 2.99 , GEL ,2015,2300
+Germany,DEU,High income,,,,
+Ghana,GHA,Lower middle income, 2.17 , GHS ,2012-2013,2900
+Gibraltar,GIB,High income,,,,
+Greece,GRC,High income,,,,
+Greenland,GRL,High income,,,,
+Grenada,GRD,Upper middle income, 6.55 , XCD ,2008,2400
+Guam,GUM,High income,,,,
+Guatemala,GTM,Upper middle income, 15.78 , GTQ ,2014,2731
+Guinea,GIN,Low income," 4,287.68 ", GNF ,2012,2100
+Guinea-Bissau,GNB,Low income,,,2010,2100
+Guyana,GUY,Upper middle income, 273.08 , GYD ,2006,2400
+Haiti,HTI,Low income," 18,127.00 ", HTG ,2022,2100
+Honduras,HND,Lower middle income, 51.17 , HNL ,2018,2100
+"Hong Kong SAR, China",HKG,High income,,,,
+Hungary,HUN,High income,,,,
+Iceland,ISL,High income,,,,
+India--Rural,IND-R,Lower middle income, 21.11 , INR ,2011-2012,2155
+India--Urban,IND-U,Lower middle income, 20.56 , INR ,2011-2012,2090
+Indonesia--Rural,IDN-R,Lower middle income," 10,322.88 ", IDR ,2017,2100
+Indonesia--Urban,IDN-U,Lower middle income," 8,541.29 ", IDR ,2017,2100
+"Iran, Islamic Rep.",IRN,Upper middle income," 670,000.00 ", IRR ,2021,2100
+Iraq,IRQ,Upper middle income," 1,751.13 ", IQD ,2017-2018,2100
+Ireland,IRL,High income,,,,
+Isle of Man,IMN,High income,,,,
+Israel,ISR,High income,,,,
+Italy,ITA,High income,,,,
+Jamaica,JAM,Upper middle income, 302.17 , JMD ,2014,2100
+Japan,JPN,High income,,,,
+Jordan,JOR,Upper middle income, 2.23 , JOD ,2017,2100
+Kazakhstan,KAZ,Upper middle income, 511.09 , KZT ,2018,2175
+Kenya,KEN,Lower middle income, 83.81 , KES ,2015-2016,2251
+Kiribati,KIR,Lower middle income, 2.89 , AUD ,2019-2020,2100
+"Korea, Dem. People’s Rep.",PRK,Low income,,,,
+"Korea, Rep.",KOR,High income,,,,
+Kosovo,XKX,Lower middle income, 1.20 , EUR ,2011,2100
+Kuwait,KWT,High income,,,,
+Kyrgyz Republic,KGZ,Lower middle income, 49.92 , KGS ,2015,2100
+Lao PDR,LAO,Lower middle income," 6,862.75 ", LAK ,2018,2100
+Latvia,LVA,High income,,,,
+Lebanon,LBN,Upper middle income," 1,480.50 ", LBP ,2011,2400
+Lesotho,LSO,Lower middle income, 4.56 , LSL ,2015,2100
+Liberia,LBR,Low income, 39.63 , LRD ,2007,2100
+Libya,LBY,Upper middle income, 3.94 , LYD ,2010,2389
+Liechtenstein,LIE,High income,,,,
+Lithuania,LTU,High income,,,,
+Luxembourg,LUX,High income,,,,
+"Macao SAR, China",MAC,High income,,,,
+Madagascar,MDG,Low income, 898.46 , MGA ,2010,2133
+Malawi,MWI,Low income, 62.85 , MWK ,2011,2400
+Malaysia,MYS,Upper middle income, 4.62 , MYR ,2010,2100
+Maldives,MDV,Upper middle income,,,,2100
+Mali,MLI,Low income, 323.54 , XOF ,2010,2450
+Malta,MLT,High income,,,,
+Marshall Islands,MHL,Upper middle income,,,,
+Mauritania,MRT,Lower middle income, 242.50 , MRU ,2014,2100
+Mauritius,MUS,Upper middle income,,,,2100
+Mexico,MEX,Upper middle income, 44.39 , MXN ,2017,2100
+"Micronesia, Fed. Sts.",FSM,Lower middle income, 1.84 , USD ,2013/2014,2565
+Moldova,MDA,Lower middle income, 68.83 , MDL ,2019,2100
+Monaco,MCO,High income,,,,
+Mongolia,MNG,Lower middle income," 2,076.00 ", MNT ,2013,2100
+Montenegro,MNE,Upper middle income, 2.49 , EUR ,2018,2211
+Morocco,MAR,Lower middle income, 5.51 , MAD ,2008,2100
+Mozambique,MOZ,Low income, 18.84 , MZN ,2014-2015,1460.09
+Myanmar,MMR,Lower middle income," 1,154.00 ", MMK ,2020,2100
+Namibia,NAM,Upper middle income, 9.63 , NAD ,2015-2016,2100
+Nauru,NRU,Upper middle income, 3.29 , AUD ,2012-2013,2100
+Nepal,NPL,Low income, 32.68 , NPR ,2010,2200
+Netherlands,NLD,High income,,,,
+New Caledonia,NCL,High income,,,,
+New Zealand,NZL,High income,,,,
+Nicaragua,NIC,Lower middle income, 30.83 , NIO ,2016,2288
+Niger,NER,Low income, 326.10 , XOF ,2011,2400
+Nigeria,NGA,Lower middle income, 223.87 , NGN ,2018-2019,2251
+North Macedonia,MKD,Upper middle income, 57.30 , MKD ,2006,2100
+Northern Mariana Islands,MNP,High income,,,,
+Norway,NOR,High income,,,,
+Oman,OMN,High income,,,,
+Pakistan,PAK,Lower middle income,,,2013-2014,2350
+Palau,PLW,High income,,,,
+Panama,PAN,High income,,,,
+Papua New Guinea,PNG,Lower middle income, 3.21 , PGK ,2009/2010,2200
+Paraguay,PRY,Upper middle income," 8,347.50 ", PYG ,2018,2100
+Peru,PER,Upper middle income, 5.78 , PEN ,2016,2100
+Philippines,PHL,Lower middle income, 48.21 , PHP ,2018,2000
+Poland,POL,High income,,,,
+Portugal,PRT,High income,,,,
+Puerto Rico,PRI,High income,,,,
+Qatar,QAT,High income,,,,
+Romania,ROU,Upper middle income, 2.87 , RON ,2002/2003,2550
+Russian Federation,RUS,Upper middle income, 157.17 , RUB ,2018,2100
+Rwanda,RWA,Low income, 287.65 , RWF ,2014,2500
+Samoa,WSM,Upper middle income, 4.93 , WST ,2013/2014,2100
+San Marino,SMR,High income,,,,
+Sao Tome and Principe,STP,Lower middle income," 12,353.69 ", STN ,2010,2400
+Saudi Arabia,SAU,High income,,,,
+Senegal,SEN,Low income, 402.70 , XOF ,2011,2400
+Serbia,SRB,Upper middle income, 140.26 , RSD ,2006,2288
+Seychelles,SYC,High income,,,,
+Sierra Leone,SLE,Low income," 5,817.93 ", SLL ,2018,2100
+Singapore,SGP,High income,,,,
+Sint Maarten (Dutch part),SXM,High income,,,,
+Slovak Republic,SVK,High income,,,,
+Slovenia,SVN,High income,,,,
+Solomon Islands,SLB,Lower middle income, 9.95 , SBD ,2012/2013,2200
+Somalia,SOM,Low income," 23,523.02 ", SOS ,2016,2100
+South Africa,ZAF,Upper middle income, 18.43 , ZAR ,2019,2100
+South Sudan,SSD,Low income, 1.74 , SDG ,2009,2400
+Spain,ESP,High income,,,,
+Sri Lanka,LKA,Lower middle income, 31.97 , LKR ,2002,2030
+St. Kitts and Nevis,KNA,High income,,,,
+St. Lucia,LCA,Upper middle income, 5.81 , XCD ,2016,2100
+St. Martin (French part),MAF,High income,,,,
+St. Vincent and the Grenadines,VCT,Upper middle income, 6.70 , XCD ,2007-2008,2400
+Sudan,SDN,Lower middle income, 8.12 , SDG ,2014-2015,2100
+Suriname,SUR,Upper middle income, 8.72 , SRD ,2016-2017,2100
+Sweden,SWE,High income,,,,
+Switzerland,CHE,High income,,,,
+Syrian Arab Republic,SYR,Low income," 1,884.23 ", SYP ,2022,2100
+Tajikistan,TJK,Low income, 4.06 , TJS ,2009,2250
+Tanzania,TZA,Low income," 1,117.04 ", TZS ,2017-2018,2100
+Thailand,THA,Upper middle income, 52.87 , THB ,2011,2100
+Timor-Leste,TLS,Lower middle income, 0.53 , USD ,2007,2100
+Togo,TGO,Low income, 562.67 , XOF ,2015,2400
+Tonga,TON,Upper middle income, 3.43 , TOP ,2009,
+Trinidad and Tobago,TTO,High income,,,,
+Tunisia,TUN,Lower middle income, 1.77 , TND ,2015,2265
+Turkey,TUR,Upper middle income, 4.63 , TRY ,2010,2100
+Turkmenistan,TKM,Upper middle income,,,2000,2100
+Turks and Caicos Islands,TCA,High income,,,,
+Tuvalu,TUV,Upper middle income, 2.93 , AUD ,2010,2100
+Uganda,UGA,Low income," 2,170.58 ", UGX ,2013,3000
+Ukraine,UKR,Lower middle income, 3.49 , UAH ,2003,2508
+United Arab Emirates,ARE,High income,,,,
+United Kingdom,GBR,High income,,,,
+United States,USA,High income,,,,
+Uruguay,URY,High income,,,,
+Uzbekistan,UZB,Lower middle income," 11,290.00 ", UZS ,2021,2200
+Vanuatu,VUT,Lower middle income, 168.29 , VUV ,2010,2100
+"Venezuela, RB",VEN,Upper middle income,,,,2100
+Vietnam,VNM,Lower middle income," 11,268.99 ", VND ,2010,2100
+Virgin Islands (U.S.),VIR,High income,,,,
+West Bank and Gaza,PSE,Lower middle income, 9.18 , ILS ,2016,2720
+"Yemen, Rep.",YEM,Low income, 229.55 , YER ,2014,2200
+Zambia,ZMB,Lower middle income," 3,236.30 ", ZMW ,2012,2100
+Zimbabwe,ZWE,Low income, 18.23 , ZWL ,2022,2100
