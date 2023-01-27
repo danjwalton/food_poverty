@@ -63,6 +63,9 @@ for(i in 1:nrow(fpls_todo)){
   
     #If valid, read the data from it
     fpl_response <- data.table(fromJSON(pip_call))
+  } else {
+    
+    fpl_response <- data.table()
   }
   
   #Fill in the effective year and original country code to the outputted data
