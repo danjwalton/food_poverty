@@ -6,8 +6,8 @@ lapply(required.packages, require, character.only=T)
 #Set working directory as local folder
 setwd(dirname(getActiveDocumentContext()$path))
 
-#Read WUP population function from remote repo
-source("https://raw.githubusercontent.com/devinit/gha_automation/main/general/wupData.R")
+##
+##### Start of API querying ######
 
 #Set up API base address
 pip <- "https://api.worldbank.org/pip/v1/pip?"
@@ -74,6 +74,12 @@ for(i in 1:nrow(fpls_todo)){
   fwrite(fpl_out, "food_poverty_2023.csv")
 }
 
+##### End of API querying #####
+##
+
+##
+##### Start of analysis ######
+
 #Total calculations
 food_pov <- fpl_out
 
@@ -85,6 +91,9 @@ food_pov[cc == "SSD" & is.na(headcount), headcount := food_pov[, headcount[cc ==
 #Fill other blanks with nearest value
 food_pov[, headcount := nafill(headcount, "nocb"), by = .(cc)]
 food_pov[, headcount := nafill(headcount, "locf"), by = .(cc)]
+
+#Read WUP population function from remote repo
+source("https://raw.githubusercontent.com/devinit/gha_automation/main/general/wupData.R")
 
 #Calculate number of poor
 wupPop <- wup_get()
@@ -100,3 +109,6 @@ fwrite(food_poor_total, "food_poor_total.csv")
 food_poor_cc <- food_pov[!is.na(poor),  .(poor = sum(poor), population = sum(population)), by = .(cc, effective_year)][, effective_headcount := poor/population][]
 food_poor_cc <- dcast(food_poor_cc, cc ~ effective_year, value.var = "poor")
 fwrite(food_poor_cc, "food_poor_cc.csv")
+
+##### End of analysis #####
+##
