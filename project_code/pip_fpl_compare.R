@@ -13,26 +13,23 @@ setwd(dirname(getActiveDocumentContext()$path))
 pip <- "https://api.worldbank.org/pip/v1/pip?"
 
 #Read in food poverty lines
-fpls <- fread("fpl_2023.csv")
-
-#Remove countries with no FPL for 2017
-fpls <- fpls[!is.na(fpl_2017)]
+fpls <- fread("fpl_compare_2023.csv")
 
 #Melt to 'long' format
 fpls <- melt(fpls, id.vars = "countrycode", variable.factor = F)
 
 #Extract the reporting year (for API use), and effective year
-fpls[, `:=` (reporting_year = substr(variable, 5, 8), effective_year = substr(variable, nchar(variable) - 3, nchar(variable)))]
+fpls[, `:=` (reporting_year = substr(variable, 5, 8), type = variable, effective_year = substr(variable, nchar(variable) - 3, nchar(variable)))]
 
 #Either read or create the output file
-if(length(list.files(pattern = "^food_poverty_2023_4[.]csv$")) == 1){
-  fpl_out <- fread("food_poverty_2023_4.csv")
+if(length(list.files(pattern = "^food_poverty_compare_2023[.]csv$")) == 1){
+  fpl_out <- fread("food_poverty_compare_2023.csv")
 } else {
-  fpl_out <- data.table(cc = character(), effective_year = integer())
+  fpl_out <- data.table(cc = character(), type = character(), effective_year = integer())
 }
 
 #List the FPLs which are outstanding to do based on the read output file
-fpls_todo <- fpls[!(paste0(countrycode, effective_year) %in% fpl_out[, paste0(cc, effective_year)])]
+fpls_todo <- fpls[!(paste0(countrycode, type, effective_year) %in% fpl_out[, paste0(cc, type, effective_year)])]
 
 #Iterate through the outstanding FPLs
 for(i in 1:nrow(fpls_todo)){
@@ -70,11 +67,12 @@ for(i in 1:nrow(fpls_todo)){
   
   #Fill in the effective year and original country code to the outputted data
   fpl_response$effective_year <- fpl_r$effective_year
+  fpl_response$type <- fpl_r$type
   fpl_response$cc <- fpl_r$countrycode
 
   #Append the outputted data to the output table and write it to the local folder
   fpl_out <- rbind(fpl_out, fpl_response, fill = T)
-  fwrite(fpl_out, "food_poverty_2023_4.csv")
+  fwrite(fpl_out, "food_poverty_compare_2023.csv")
 }
 
 ##### End of API querying #####
@@ -111,7 +109,7 @@ pip_call <- paste0(pip, "country=all&year=2019&fill_gaps=true")
 pip_response <- data.table(fromJSON(pip_call))
 
 missing_pip_countries <- pip_response[!(country_code %in% food_pov$country_code), .(country_name, country_code, region_name, region_code, estimation_type = "regional")]
-regional_headcounts <- rbind(food_pov[, .(headcount = sum(poor)/sum(population)), by = .(effective_year, region_name)], data.table(effective_year = min(food_pov$effective_year):max(food_pov$effective_year), region_name = "Other High Income Countries", headcount = 0))
+regional_headcounts <- food_pov[, .(headcount = sum(poor)/sum(population)), by = .(effective_year, type, region_name)]
 
 missing_pip_countries <- merge(missing_pip_countries, regional_headcounts, by = c("region_name"), all.x = T, allow.cartesian = T)
 missing_pip_countries <- merge(missing_pip_countries, wupPop[, .(cc, country_code = cc, effective_year = as.integer(year), population)], all.x = T, by = c("country_code", "effective_year"))
@@ -133,14 +131,14 @@ missing_wb_countries[, poor := headcount * population]
 
 food_pov <- rbind(food_pov, missing_wb_countries, fill = T)[order(effective_year, country_code)]
 
-#Total by year
-food_poor_total <- food_pov[!is.na(poor), .(poor = sum(poor), population = sum(population)), by = effective_year][, effective_headcount := poor/population][]
-fwrite(food_poor_total, "food_poor_total_4.csv")
+#Total by region
+food_poor_total <- food_pov[!is.na(poor), .(poor = sum(poor), population = sum(population)), by = .(effective_year, type)][, effective_headcount := poor/population][]
+fwrite(food_poor_total, "food_poor_compare_total.csv")
 
 #Total by country
-food_poor_cc <- food_pov[!is.na(poor),  .(poor = sum(poor), population = sum(population)), by = .(cc, effective_year)][, effective_headcount := poor/population][]
-food_poor_cc <- dcast(food_poor_cc, cc ~ effective_year, value.var = "poor")
-fwrite(food_poor_cc, "food_poor_cc_4.csv")
+food_poor_cc <- food_pov[!is.na(poor),  .(poor = sum(poor), population = sum(population)), by = .(cc, effective_year, type)][, effective_headcount := poor/population][]
+food_poor_cc <- dcast(food_poor_cc, cc + type ~ effective_year, value.var = "poor")
+fwrite(food_poor_cc, "food_poor_compare_cc.csv")
 
 ##### End of analysis #####
 ##
